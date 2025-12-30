@@ -1,0 +1,17 @@
+<!-- templates/base.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Screenpeak - Отзывы на фильмы, сериалы и аниме</title>
+</head>
+
+<body>
+  {% include "includes/header.html" %}
+  <main>
+    {% block content %}
+    {% endblock %}
+  </main>
+  {% include "includes/footer.html" %}
+</body>
+
+</html>

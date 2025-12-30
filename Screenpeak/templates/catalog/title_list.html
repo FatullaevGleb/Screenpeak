@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>
+    {% if current_category == 'film' %}Фильмы
+    {% elif current_category == 'series' %}Сериалы
+    {% elif current_category == 'anime' %}Аниме
+    {% endif %}
+</h1>
+
+{% if titles %}
+    <div class="titles-list">
+        {% for title in titles %}
+            <div class="title-card">
+                <h2>{{ title.title }}</h2>
+                <p>Год: {{ title.pub_year }}</p>
+                {% if title.image %}
+                    <img src="{{ title.image.url }}" alt="{{ title.title }}" width="200">
+                {% endif %}
+                <p>{{ title.description|truncatechars:100 }}</p>
+                <a href="#">Подробнее</a> <!-- Позже сделаем ссылку -->
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>Пока нет произведений в этой категории.</p>
+{% endif %}
+{% endblock %}
