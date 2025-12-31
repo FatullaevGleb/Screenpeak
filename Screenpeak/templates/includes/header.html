@@ -1,9 +1,53 @@
+{% load static %}
+
 <header>
-    <nav>
-        <a href="/">Главная</a>
-        <a href="{% url 'catalog:films' %}">Фильмы</a>
-        <a href="{% url 'catalog:series' %}">Сериалы</a>
-        <a href="{% url 'catalog:anime' %}">Аниме</a>
-        <a href="/reviews/add/">Добавить отзыв</a>
+    <nav class="navbar navbar-light" style="background-color: #FFD700">
+        <div class="container">
+            <!-- Логотип слева -->
+            <a class="navbar-brand text-dark fw-bold" href="/">
+                <i class="bi bi-film me-2"></i>
+                Screenpeak
+            </a>
+            
+            <!-- Навигация по центру -->
+            {% with request.resolver_match.view_name as view_name %}
+            <ul class="nav nav-pills mx-auto">  <!-- mx-auto для центрирования -->
+                <!-- Фильмы -->
+                <li class="nav-item">
+                    <a class="nav-link {% if view_name == 'catalog:films' %}active{% else %}text-dark{% endif %}" 
+                       href="{% url 'catalog:films' %}"
+                       style="{% if view_name == 'catalog:films' %}background-color: #000; color: #fff;{% endif %}">
+                        <i class="bi bi-camera-reels me-1"></i>Фильмы
+                    </a>
+                </li>
+                
+                <!-- Сериалы -->
+                <li class="nav-item">
+                    <a class="nav-link {% if view_name == 'catalog:series' %}active{% else %}text-dark{% endif %}" 
+                       href="{% url 'catalog:series' %}"
+                       style="{% if view_name == 'catalog:series' %}background-color: #000; color: #fff;{% endif %}">
+                        <i class="bi bi-tv me-1"></i>Сериалы
+                    </a>
+                </li>
+                
+                <!-- Аниме -->
+                <li class="nav-item">
+                    <a class="nav-link {% if view_name == 'catalog:anime' %}active{% else %}text-dark{% endif %}" 
+                       href="{% url 'catalog:anime' %}"
+                       style="{% if view_name == 'catalog:anime' %}background-color: #000; color: #fff;{% endif %}">
+                        <i class="bi bi-controller me-1"></i>Аниме
+                    </a>
+                </li>
+            </ul>
+            {% endwith %}
+            
+            <!-- Кнопка "Добавить отзыв" справа -->
+            <div>
+                <a class="btn btn-dark text-white" 
+                   href="#">
+                    <i class="bi bi-chat-square-text me-1"></i>Добавить отзыв
+                </a>
+            </div>
+        </div>
     </nav>
 </header>
