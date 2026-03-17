@@ -1,13 +1,39 @@
-<!-- templates/pages/index.html -->
 {% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Screenpeak - Личный дневник отзывов{% endblock %}
 
 {% block content %}
-<h1>Добро пожаловать на Screenpeak!</h1>
-<p>Здесь вы можете читать и писать отзывы на фильмы, сериалы и аниме.</p>
-
-<!-- Позже сюда добавим:
-     - Последние отзывы
-     - Популярные произведения
-     - Статистику
--->
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <h1 class="display-4 mb-4">
+                <i class="bi bi-journal-bookmark-fill text-primary"></i>
+                Screenpeak
+            </h1>
+            <p class="lead mb-4">
+                Ваш личный дневник для отзывов на фильмы, сериалы и игры.
+            </p>
+            
+            {% if not user.is_authenticated %}
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Начните вести свой дневник</h5>
+                        <p class="card-text">
+                            Войдите или зарегистрируйтесь, чтобы добавлять отзывы.
+                        </p>
+                        <div class="d-flex justify-content-center gap-3">
+                            <a href="{% url 'login' %}" class="btn btn-primary">
+                                <i class="bi bi-box-arrow-in-right me-2"></i>Войти
+                            </a>
+                            <a href="{% url 'register' %}" class="btn btn-success">
+                                <i class="bi bi-person-plus me-2"></i>Регистрация
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
 {% endblock %}

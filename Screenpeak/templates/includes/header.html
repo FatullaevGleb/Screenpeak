@@ -1,7 +1,7 @@
 {% load static %}
 
 <header>
-    <nav class="navbar navbar-light" style="background-color: #FFD700">
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #FFD700">
         <div class="container">
             <!-- Логотип слева -->
             <a class="navbar-brand text-dark fw-bold" href="/">
@@ -9,44 +9,78 @@
                 Screenpeak
             </a>
             
-            <!-- Навигация по центру -->
-            {% with request.resolver_match.view_name as view_name %}
-            <ul class="nav nav-pills mx-auto">  <!-- mx-auto для центрирования -->
-                <!-- Фильмы -->
-                <li class="nav-item">
-                    <a class="nav-link {% if view_name == 'catalog:films' %}active{% else %}text-dark{% endif %}" 
-                       href="{% url 'catalog:films' %}"
-                       style="{% if view_name == 'catalog:films' %}background-color: #000; color: #fff;{% endif %}">
-                        <i class="bi bi-camera-reels me-1"></i>Фильмы
-                    </a>
-                </li>
-                
-                <!-- Сериалы -->
-                <li class="nav-item">
-                    <a class="nav-link {% if view_name == 'catalog:series' %}active{% else %}text-dark{% endif %}" 
-                       href="{% url 'catalog:series' %}"
-                       style="{% if view_name == 'catalog:series' %}background-color: #000; color: #fff;{% endif %}">
-                        <i class="bi bi-tv me-1"></i>Сериалы
-                    </a>
-                </li>
-                
-                <!-- Аниме -->
-                <li class="nav-item">
-                    <a class="nav-link {% if view_name == 'catalog:anime' %}active{% else %}text-dark{% endif %}" 
-                       href="{% url 'catalog:anime' %}"
-                       style="{% if view_name == 'catalog:anime' %}background-color: #000; color: #fff;{% endif %}">
-                        <i class="bi bi-controller me-1"></i>Аниме
-                    </a>
-                </li>
-            </ul>
-            {% endwith %}
+            <!-- Кнопка для мобильных -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
             
-            <!-- Кнопка "Добавить отзыв" справа -->
-            <div>
-                <a class="btn btn-dark text-white" 
-                   href="#">
-                    <i class="bi bi-chat-square-text me-1"></i>Добавить отзыв
-                </a>
+            <!-- Контент навбара (скрывается на мобильных) -->
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <!-- Навигация по центру -->
+                {% with request.resolver_match.view_name as view_name %}
+                <ul class="nav nav-pills mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link {% if view_name == 'catalog:films' %}active{% else %}text-dark{% endif %}" 
+                           href="{% url 'catalog:films' %}"
+                           style="{% if view_name == 'catalog:films' %}background-color: #000; color: #fff;{% endif %}">
+                            <i class="bi bi-camera-reels me-1"></i>Фильмы
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link {% if view_name == 'catalog:series' %}active{% else %}text-dark{% endif %}" 
+                           href="{% url 'catalog:series' %}"
+                           style="{% if view_name == 'catalog:series' %}background-color: #000; color: #fff;{% endif %}">
+                            <i class="bi bi-tv me-1"></i>Сериалы
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link {% if view_name == 'catalog:games' %}active{% else %}text-dark{% endif %}" 
+                           href="{% url 'catalog:games' %}"
+                           style="{% if view_name == 'catalog:games' %}background-color: #000; color: #fff;{% endif %}">
+                            <i class="bi bi-controller me-1"></i>Игры
+                        </a>
+                    </li>
+                </ul>
+                {% endwith %}
+                
+                <!-- Правая часть: кнопки авторизации (БЕЗ "Мои отзывы") -->
+                <div class="d-flex align-items-center">
+                    <!-- Кнопка "Добавить отзыв" для всех -->
+                    <a class="btn btn-dark text-white me-2" href="{% url 'reviews:add' %}">
+                        <i class="bi bi-chat-square-text me-1"></i>Добавить отзыв
+                    </a>
+                    
+                    <!-- Для авторизованных пользователей -->
+                    {% if user.is_authenticated %}
+                        <!-- Только имя пользователя и выход -->
+                        <div class="dropdown">
+                            <button class="btn btn-dark dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                <i class="bi bi-person-circle me-1"></i>{{ user.username }}
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                    <form method="post" action="{% url 'logout' %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="dropdown-item text-danger">
+                                            <i class="bi bi-box-arrow-right me-2"></i>Выйти
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                    <!-- Для анонимных пользователей -->
+                    {% else %}
+                        <a class="btn btn-outline-dark me-2" href="{% url 'login' %}">
+                            <i class="bi bi-box-arrow-in-right me-1"></i>Войти
+                        </a>
+                        <a class="btn btn-dark" href="{% url 'register' %}">
+                            <i class="bi bi-person-plus me-1"></i>Регистрация
+                        </a>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </nav>

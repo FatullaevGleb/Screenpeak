@@ -1,45 +1,54 @@
-<!-- templates/registration/login.html -->
-{% extends "base.html" %}
-<!-- Загружаем библиотеку для работы со стилями Bootstrap. -->
-{% load django_bootstrap5 %}
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Вход | Screenpeak{% endblock %}
 
 {% block content %}
-  <!-- Если в запросе передан GET-параметр с указанием страницы, 
-    куда надо перейти после входа. -->
-  {% if next %}
-    <!-- Если пользователь уже залогинен, но не обладает нужными правами. -->
-    {% if user.is_authenticated %}
-      <p>
-        У вашего аккаунта нет доступа к этой странице.
-        Чтобы продолжить, войдите в систему с аккаунтом,
-        у которого есть доступ.
-      </p>
-    {% else %}
-      <p>
-        Пожалуйста, войдите в систему,
-        чтобы просматривать эту страницу.
-      </p>
-    {% endif %}
-  {% endif %}
-
-  <div class="card col-4 m-3">
-    <div class="card-header">
-      Войти в систему
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0"><i class="bi bi-box-arrow-in-right me-2"></i>Вход на сайт</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="{% url 'login' %}">
+                        {% csrf_token %}
+                        
+                        {% if form.errors %}
+                            <div class="alert alert-danger">
+                                Неправильное имя пользователя или пароль. Попробуйте снова.
+                            </div>
+                        {% endif %}
+                        
+                        <div class="mb-3">
+                            <label for="id_username" class="form-label">Имя пользователя</label>
+                            <input type="text" name="username" class="form-control" id="id_username" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="id_password" class="form-label">Пароль</label>
+                            <input type="password" name="password" class="form-control" id="id_password" required>
+                        </div>
+                        
+                        <input type="hidden" name="next" value="{{ next }}">
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-box-arrow-in-right me-2"></i>Войти
+                            </button>
+                        </div>
+                    </form>
+                    
+                    <hr class="my-4">
+                    
+                    <div class="text-center">
+                        <p>Нет аккаунта? <a href="{% url 'register' %}">Зарегистрироваться</a></p>
+                        <p><a href="{% url 'password_reset' %}">Забыли пароль?</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="card-body">
-      <!-- В атрибуте action указываем адрес, куда должен отправляться запрос. -->
-      <form method="post" action="{% url 'login' %}">
-        {% csrf_token %}
-        {% bootstrap_form form %}
-        <!-- В скрытом поле передаём параметр next, 
-          это URL для переадресации после логина. -->
-        <input type="hidden" name="next" value="{{ next }}">
-        {% bootstrap_button button_type="submit" content="Войти" %}
-      </form>
-      <div>
-        <!-- Ссылка для перехода на страницу восстановления пароля. -->
-        <a href="{% url 'password_reset' %}">Забыли пароль?</a>
-      </div>
-    </div>
-  </div>
+</div>
 {% endblock %}
